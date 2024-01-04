@@ -1,0 +1,102 @@
+// main variables
+
+// background
+$background-clr-black: #181415;
+$background-clr-white: #fbfbfb;
+
+// company
+$company-clr-green: #0a381f;
+
+// text
+$text-clr-black: #181415;
+$text-clr-white: #fbfbfb;
+
+// table
+$table-clr-header: #ececec;
+$table-clr-stroce: #eeeeee;
+
+// highlight
+$highlight-clr-grey: #ececec;
+$highlight-clr-red: #e70000;
+$highlight-clr-green: #83cd49;
+$highlight-clr-yellow: #e9ee00;
+
+// main styles
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url('../assets/fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Black';
+  src: url('../assets/fonts/Roboto-Black.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url('../assets/fonts/Roboto-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'Roboto-Regular', sans-serif;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: $background-clr-white;
+  font-family: 'Roboto-Regular', sans-serif;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.35rem 1rem;
+  background-color: $company-clr-green;
+  border: 2px solid $company-clr-green;
+  border-radius: 0.75rem;
+  color: $text-clr-white;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: $background-clr-white;
+    color: $company-clr-green;
+  }
+  &:active {
+    scale: 0.95;
+  }
+}
+
+// mixin styles
+@mixin center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// breakepoints
+@media screen and (max-width: 1400px) {
+  * {
+    font-size: 0.97em;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  * {
+    font-size: 0.94em;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  * {
+    font-size: 0.92em;
+  }
+}
