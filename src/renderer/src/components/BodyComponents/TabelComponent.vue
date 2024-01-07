@@ -51,9 +51,7 @@ export default {
   },
   setup() {
     // array with all line data
-    const lineDataArray = ref([
-      
-    ])
+    const lineDataArray = ref([])
     // other variables
     const editModus = ref(false)
     const showAlert = ref(false)
@@ -67,7 +65,6 @@ export default {
     // edit tabel
     const toggleEditModus = () => {
       editModus.value = !editModus.value
-      console.log(newLineData.value)
     }
 
     const currentIndex = ref(null)
@@ -88,6 +85,7 @@ export default {
     }
 
     const saveEdit = () => {
+      console.log(lineDataArray.value)
       editModus.value = !editModus.value
     }
 
