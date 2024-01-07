@@ -76,7 +76,7 @@ export default {
     }
     const deleteLineRealy = () => {
       showAlert.value = !showAlert.value
-      window.electron.send('delete-data', currentIndex.value);
+      window.electron.send('delete-data', currentIndex.value)
     }
 
     // save edit
@@ -87,6 +87,7 @@ export default {
     const saveEdit = () => {
       console.log(lineDataArray.value)
       editModus.value = !editModus.value
+      window.electron.send('update-data', newLineData.value)
     }
 
     return {
@@ -104,10 +105,10 @@ export default {
 
   mounted() {
     // This code will run when the component is mounted to the DOM
-    window.electron.send('load-data');
+    window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
-      this.lineDataArray = data;
-    });
+      this.lineDataArray = data
+    })
   }
 }
 </script>

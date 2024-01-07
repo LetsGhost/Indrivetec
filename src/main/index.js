@@ -59,8 +59,8 @@ function createWindow() {
             }
           },
           {
-            label: "Clear",
-            accelerator: "CommandOrControl+D",
+            label: 'Clear',
+            accelerator: 'CommandOrControl+D',
             click: () => {
               store.clear()
             }
@@ -78,11 +78,9 @@ function createWindow() {
   })
 
   ipcMain.on('load-data', () => {
-    console.log('load-data')
     const items = store.store
     const length = Object.keys(items).length
     id = length
-    console.log(items)
     mainWindow.webContents.send('load-data', items)
   })
 
@@ -93,7 +91,6 @@ function createWindow() {
 
   ipcMain.on('update-data', (event, arg) => {
     console.log(arg)
-    mainWindow.webContents.reload()
   })
 }
 

@@ -169,7 +169,7 @@ export default {
         console.log(data); // prints "pong"
       });
       */
-      window.electron.send('save-data', lineData.value);
+      window.electron.send('save-data', lineData.value)
       lineData.value = {}
     }
 
