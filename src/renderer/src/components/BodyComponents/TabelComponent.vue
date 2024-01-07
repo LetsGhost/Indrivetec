@@ -85,8 +85,8 @@ export default {
     }
 
     const saveEdit = () => {
-      console.log(lineDataArray.value)
       editModus.value = !editModus.value
+      console.log(newLineData.value)
       window.electron.send('update-data', newLineData.value)
     }
 
@@ -107,7 +107,10 @@ export default {
     // This code will run when the component is mounted to the DOM
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
+      const array = Object.values(data)
+
       this.lineDataArray = data
+      console.log(this.lineDataArray)
     })
   }
 }
