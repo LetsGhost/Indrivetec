@@ -294,8 +294,6 @@ export default {
         link: third2Data.value.location.link
       }
     }))
-    
-    
 
     watchEffect(() => {
       emit('update-line-data', lineData.value)
