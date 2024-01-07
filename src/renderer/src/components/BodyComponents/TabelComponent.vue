@@ -89,6 +89,7 @@ export default {
 
     const saveEdit = () => {
       editModus.value = !editModus.value
+      console.log(newLineData.value)  
     }
 
     return {
