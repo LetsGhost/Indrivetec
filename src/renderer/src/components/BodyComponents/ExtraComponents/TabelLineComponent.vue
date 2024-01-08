@@ -297,6 +297,7 @@ export default {
 
     watchEffect(() => {
       emit('update-line-data', lineData.value)
+      console.log(lineData.value)
     })
 
     return {

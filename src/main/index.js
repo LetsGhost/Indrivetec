@@ -85,7 +85,7 @@ function createWindow() {
   })
 
   ipcMain.on('delete-data', (event, arg) => {
-    store.delete(arg)
+    store.delete(arg.toString())
     mainWindow.webContents.reload()
   })
 

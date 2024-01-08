@@ -79,15 +79,14 @@ export default {
       window.electron.send('delete-data', currentIndex.value)
     }
 
-    // save edit try putting it in without the .value
     const updateLineData = (lineData) => {
-      newLineData.value = lineData
+      newLineData.value.push(lineData)
     }
 
     const saveEdit = () => {
       editModus.value = !editModus.value
       console.log(newLineData.value)
-      window.electron.send('update-data', newLineData.value)
+      //window.electron.send('update-data', newLineData)
     }
 
     return {
@@ -107,10 +106,9 @@ export default {
     // This code will run when the component is mounted to the DOM
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
-      const array = Object.values(data)
-
-      this.lineDataArray = data
-      console.log(this.lineDataArray)
+      for(let object in data) {
+        this.lineDataArray.push(data[object])
+      }
     })
   }
 }
