@@ -106,7 +106,7 @@ export default {
     // This code will run when the component is mounted to the DOM
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
-      for(let object in data) {
+      for (let object in data) {
         this.lineDataArray.push(data[object])
       }
     })
