@@ -80,7 +80,7 @@ export default {
       window.electron.send('delete-data', currentIndex.value)
     }
 
-    // save edit
+    // save edit try putting it in without the .value
     const updateLineData = (lineData) => {
       newLineData.value = lineData
     }
