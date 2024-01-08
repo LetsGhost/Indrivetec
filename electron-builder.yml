@@ -11,7 +11,9 @@ files:
 asarUnpack:
   - resources/**
 win:
+  target: portable
   executableName: electron-app
+  # icon: build/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
