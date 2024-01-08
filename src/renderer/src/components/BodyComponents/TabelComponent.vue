@@ -65,7 +65,6 @@ export default {
     // edit tabel
     const toggleEditModus = () => {
       editModus.value = !editModus.value
-      console.log(newLineData.value)
     }
 
     const currentIndex = ref(null)
@@ -87,6 +86,7 @@ export default {
 
     const saveEdit = () => {
       editModus.value = !editModus.value
+      console.log(newLineData.value)
       window.electron.send('update-data', newLineData.value)
     }
 
@@ -107,7 +107,10 @@ export default {
     // This code will run when the component is mounted to the DOM
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
+      const array = Object.values(data)
+
       this.lineDataArray = data
+      console.log(this.lineDataArray)
     })
   }
 }

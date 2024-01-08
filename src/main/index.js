@@ -90,7 +90,8 @@ function createWindow() {
   })
 
   ipcMain.on('update-data', (event, arg) => {
-    console.log(arg)
+    const parsedData = JSON.parse(arg)
+    console.log(parsedData)
   })
 }
 
