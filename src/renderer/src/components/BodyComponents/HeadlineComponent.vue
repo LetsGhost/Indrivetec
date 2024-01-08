@@ -55,6 +55,7 @@ export default {
 
     const saveTimeStampEdit = () => {
       toggleEditWin.value = !toggleEditWin.value
+      window.electron.send('save-date', { date: date.value, time: time.value })
     }
 
     return {
@@ -64,6 +65,15 @@ export default {
       date,
       time
     }
+  },
+
+  mounted() {
+    // This code will run when the component is mounted to the DOM
+    window.electron.send('load-date')
+    window.electron.receive('load-date', (data) => {
+      this.date = data.date
+      this.time = data.time
+    })
   }
 }
 </script>

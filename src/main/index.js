@@ -3,8 +3,10 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import Store from 'electron-store'
+import { time } from 'console'
 
 const store = new Store()
+const timeStore = new Store({name: "date-time"})
 
 function createWindow() {
   // Create the browser window.
@@ -92,6 +94,16 @@ function createWindow() {
   ipcMain.on('update-data', (event, arg) => {
     const parsedData = JSON.parse(arg)
     console.log(parsedData)
+  })
+
+  ipcMain.on("save-date", (event, arg) => {
+    timeStore.set("time", arg.time)
+    timeStore.set("date", arg.date)
+  })
+
+  ipcMain.on("load-date", () => {
+    const items = timeStore.store
+    mainWindow.webContents.send("load-date", items)
   })
 }
 
