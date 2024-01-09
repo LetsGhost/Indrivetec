@@ -1,12 +1,12 @@
-import { app, shell, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import Store from 'electron-store'
-import { time } from 'console'
+import fs from 'fs'
 
 const store = new Store()
-const timeStore = new Store({name: "date-time"})
+const timeStore = new Store({ name: 'date-time' })
 
 function createWindow() {
   // Create the browser window.
@@ -44,7 +44,50 @@ function createWindow() {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
       {
-        label: 'File',
+        label: 'Datei',
+        submenu: [
+          {
+            label: 'Speichern',
+            click: async () => {
+              const currentTime = new Date();
+              const date = currentTime.toLocaleDateString('de-DE');
+              const dateTime = `${date}`;
+              const { filePath } = await dialog.showSaveDialog({
+                title: 'Save data to file',
+                defaultPath: `Tabelle_${dateTime}.json`,
+                filters: [{ name: `JSON`, extensions: ['json'] }]
+              })
+
+              if (filePath) {
+                const data = JSON.stringify(store.store)
+                fs.writeFileSync(filePath, data)
+              }
+            }
+          },
+          {
+            label: 'Laden',
+            click: async () => {
+              const { filePaths } = await dialog.showOpenDialog({
+                title: 'Load data from file',
+                filters: [{ name: `JSON`, extensions: ['json'] }]
+              })
+
+              if (filePaths[0]) {
+                const data = fs.readFileSync(filePaths[0])
+                const parsedData = JSON.parse(data)
+                store.clear()
+                for (const [key, value] of Object.entries(parsedData)) {
+                  store.set(key, value)
+                }
+                console.log(store.store)
+                mainWindow.webContents.reload()
+              }
+            }
+          }
+        ]
+      },
+      {
+        label: 'Dev',
         submenu: [
           {
             label: 'Open DevTools',
@@ -96,14 +139,14 @@ function createWindow() {
     console.log(parsedData)
   })
 
-  ipcMain.on("save-date", (event, arg) => {
-    timeStore.set("time", arg.time)
-    timeStore.set("date", arg.date)
+  ipcMain.on('save-date', (event, arg) => {
+    timeStore.set('time', arg.time)
+    timeStore.set('date', arg.date)
   })
 
-  ipcMain.on("load-date", () => {
+  ipcMain.on('load-date', () => {
     const items = timeStore.store
-    mainWindow.webContents.send("load-date", items)
+    mainWindow.webContents.send('load-date', items)
   })
 }
 
