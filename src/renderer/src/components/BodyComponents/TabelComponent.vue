@@ -110,6 +110,7 @@ export default {
       for (let object in data) {
         this.lineDataArray.push(data[object])
       }
+      console.log(this.lineDataArray)
     })
   }
 }
