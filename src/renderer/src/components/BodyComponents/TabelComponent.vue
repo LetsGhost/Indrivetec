@@ -107,8 +107,18 @@ export default {
     // This code will run when the component is mounted to the DOM
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
-      for (let object in data) {
-        this.lineDataArray.push(data[object])
+      for (let key in data) {
+        console.log(data[key].onlineOffline)
+        fetch(data[key].remoteAccessIPAddress, { mode: 'no-cors' })
+          .then(() => {
+            data[key].onlineOffline = true
+            console.log('ok')
+          })
+          .catch(() => {
+            data[key].onlineOffline = true
+            console.log('not ok')
+          })
+        this.lineDataArray.push(data[key])
       }
       console.log(this.lineDataArray)
     })

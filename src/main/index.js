@@ -49,9 +49,9 @@ function createWindow() {
           {
             label: 'Speichern',
             click: async () => {
-              const currentTime = new Date();
-              const date = currentTime.toLocaleDateString('de-DE');
-              const dateTime = `${date}`;
+              const currentTime = new Date()
+              const date = currentTime.toLocaleDateString('de-DE')
+              const dateTime = `${date}`
               const { filePath } = await dialog.showSaveDialog({
                 title: 'Save data to file',
                 defaultPath: `Tabelle_${dateTime}.json`,

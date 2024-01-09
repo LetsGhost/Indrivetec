@@ -295,10 +295,13 @@ export default {
       }
     }))
 
-    watch(() => () =>{
-      console.log("hi")
-      emit('update-line-data', lineData.value)
-    }, {deep: true})
+    watch(
+      () => () => {
+        console.log('hi')
+        emit('update-line-data', lineData.value)
+      },
+      { deep: true }
+    )
 
     return {
       first12Data,
