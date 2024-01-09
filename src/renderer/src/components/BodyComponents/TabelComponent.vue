@@ -59,7 +59,7 @@ export default {
 
     // add new line to tabel
     const addNewLine = (lineData) => {
-      //lineDataArray.value.push(lineData)
+      lineDataArray.value.push(lineData)
     }
 
     // edit tabel
@@ -76,6 +76,7 @@ export default {
     }
     const deleteLineRealy = () => {
       showAlert.value = !showAlert.value
+      lineDataArray.value.splice(currentIndex.value, 1)
       window.electron.send('delete-data', currentIndex.value)
     }
 

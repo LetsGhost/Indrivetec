@@ -76,7 +76,7 @@ function createWindow() {
   ipcMain.on('save-data', (event, arg) => {
     store.set(id.toString(), arg)
     id++
-    mainWindow.webContents.reload()
+    //mainWindow.webContents.reload()
   })
 
   ipcMain.on('load-data', () => {
@@ -88,7 +88,7 @@ function createWindow() {
 
   ipcMain.on('delete-data', (event, arg) => {
     store.delete(arg.toString())
-    mainWindow.webContents.reload()
+    //mainWindow.webContents.reload()
   })
 
   ipcMain.on('update-data', (event, arg) => {
