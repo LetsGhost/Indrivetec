@@ -108,19 +108,8 @@ export default {
     window.electron.send('load-data')
     window.electron.receive('load-data', (data) => {
       for (let key in data) {
-        console.log(data[key].onlineOffline)
-        fetch(data[key].remoteAccessIPAddress, { mode: 'no-cors' })
-          .then(() => {
-            data[key].onlineOffline = true
-            console.log('ok')
-          })
-          .catch(() => {
-            data[key].onlineOffline = true
-            console.log('not ok')
-          })
         this.lineDataArray.push(data[key])
       }
-      console.log(this.lineDataArray)
     })
   }
 }
