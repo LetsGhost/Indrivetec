@@ -16,7 +16,6 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: false,
-    icon: path.join(__dirname, './Icon-table.ico'),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       contextIsolation: true,
