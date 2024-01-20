@@ -81,7 +81,6 @@ function createWindow() {
                 for (const [key, value] of Object.entries(parsedData)) {
                   store.set(key, value)
                 }
-                console.log(store.store)
                 mainWindow.webContents.reload()
               }
             }
@@ -154,7 +153,9 @@ function createWindow() {
 
   ipcMain.on('update-data', (event, arg) => {
     const parsedData = JSON.parse(arg)
-    console.log(parsedData)
+    for(let i = 0; i < parsedData.length; i++) {
+      store.set(i.toString(), parsedData[i])
+    }
   })
 
   ipcMain.on('save-date', (event, arg) => {
