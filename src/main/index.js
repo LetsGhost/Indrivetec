@@ -119,7 +119,6 @@ function createWindow() {
   ipcMain.on('save-data', (event, arg) => {
     store.set(id.toString(), arg)
     id++
-    //mainWindow.webContents.reload()
   })
 
   ipcMain.on('load-data', () => {
@@ -131,12 +130,13 @@ function createWindow() {
 
   ipcMain.on('delete-data', (event, arg) => {
     store.delete(arg.toString())
-    //mainWindow.webContents.reload()
   })
 
   ipcMain.on('update-data', (event, arg) => {
     const parsedData = JSON.parse(arg)
-    console.log(parsedData)
+    for(let i = 0; i < parsedData.length; i++) {
+      store.set(i.toString(), parsedData[i])
+    }
   })
 
   ipcMain.on('save-date', (event, arg) => {

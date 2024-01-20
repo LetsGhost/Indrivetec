@@ -38,11 +38,11 @@ main {
   flex-direction: column;
   margin-top: 1rem;
 
-  .tabel-container {
-    padding: 0.2rem;
-    height: 70vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
+  // .tabel-container {
+  //   padding: 0.2rem;
+  //   height: 70vh;
+  //   overflow-y: scroll;
+  //   overflow-x: hidden;
+  // }
 }
 </style>

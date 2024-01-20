@@ -14,7 +14,9 @@ import {
   faArrowUp,
   faMinus,
   faGlobe,
-  faTrashAlt
+  faTrashAlt,
+  faCircleMinus,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faPenToSquare,
@@ -26,7 +28,9 @@ library.add(
   faArrowUp,
   faMinus,
   faGlobe,
-  faTrashAlt
+  faTrashAlt,
+  faCircleMinus,
+  faCheck
 )
 
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).mount('#app')

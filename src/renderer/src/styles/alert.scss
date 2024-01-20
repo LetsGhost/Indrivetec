@@ -1,0 +1,96 @@
+@import './main.scss';
+
+// delet alert
+.alert-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  @include center();
+  height: 100vh;
+  width: 100vw;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  .alert {
+    @include center();
+    flex-direction: column;
+    padding: 2.5rem;
+    gap: 2rem;
+    background-color: $highlight-clr-grey;
+    border-radius: 0.75rem;
+
+    p {
+      margin: 0;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: 400;
+    }
+
+    .button-container {
+      @include center();
+      gap: 0.5rem;
+
+      p {
+        margin: 0;
+        font-size: 1em;
+        font-weight: 400;
+      }
+
+      .delet {
+        background-color: $background-clr-white;
+        color: $text-clr-black;
+        &:hover {
+          background-color: $company-clr-green;
+          color: $text-clr-white;
+        }
+      }
+    }
+  }
+}
+
+// success alert
+
+.success-container {
+  position: absolute;
+  bottom: 5rem;
+  z-index: 1000;
+  @include center();
+  padding: 0.75rem 1rem;
+  background-color: $highlight-clr-grey;
+  border-radius: 0.75rem;
+  font-size: 1.2em;
+
+  span {
+    @include center();
+    gap: 1rem;
+
+    p {
+      margin: 0;
+    }
+
+    .check-icon {
+      color: $highlight-clr-green;
+    }
+  }
+
+  .progress {
+    position: inherit;
+    left: 5px;
+    bottom: 4px;
+    height: 3px;
+    width: calc(100% - 10px);
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(to right, $highlight-clr-grey, $highlight-clr-green);
+    border-radius: inherit;
+    animation: progress 1.5s 0.3s linear;
+  }
+}
+
+@keyframes progress {
+  to {
+    transform: scaleX(1);
+  }
+}

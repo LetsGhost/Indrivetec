@@ -295,13 +295,9 @@ export default {
       }
     }))
 
-    watch(
-      () => () => {
-        console.log('hi')
-        emit('update-line-data', lineData.value)
-      },
-      { deep: true }
-    )
+    watchEffect(() => {
+      emit('update-line-data', lineData.value)
+    })
 
     return {
       first12Data,

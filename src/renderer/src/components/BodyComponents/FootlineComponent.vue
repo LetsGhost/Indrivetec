@@ -77,10 +77,13 @@ export default {
 @import '../../styles/main.scss';
 
 .container {
-  position: relative;
+  position: sticky;
+  bottom: 5rem;
   @include center();
   justify-content: space-between;
+  padding: 0.5rem 0;
   width: 100%;
+  background-color: $background-clr-white;
 
   .counter {
     @include center();

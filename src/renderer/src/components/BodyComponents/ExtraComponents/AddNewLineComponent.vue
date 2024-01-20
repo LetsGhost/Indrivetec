@@ -161,14 +161,6 @@ export default {
     const addNewLine = () => {
       emit('add-line', lineData.value)
       emit('toggle-add-new-line')
-      console.log(lineData.value)
-      /*
-      Just examples here we are injecting ouer code into the main process
-      window.electron.send('request-mainprocess-action', 'ping');
-      window.electron.receive('mainprocess-response', (data) => {
-        console.log(data); // prints "pong"
-      });
-      */
       window.electron.send('save-data', lineData.value)
       lineData.value = {}
     }
