@@ -1,0 +1,56 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_99_2)">
+<rect width="80" height="80" rx="6" fill="white"/>
+<mask id="path-2-inside-1_99_2" fill="white">
+<path d="M0 16H80V29H0V16Z"/>
+</mask>
+<path d="M0 16H80V29H0V16Z" fill="#DCEDC8"/>
+<path d="M80 28H0V30H80V28Z" fill="#AED581" mask="url(#path-2-inside-1_99_2)"/>
+<mask id="path-4-inside-2_99_2" fill="white">
+<path d="M0 28H80V29H0V28Z"/>
+</mask>
+<path d="M80 28.5H0V29.5H80V28.5Z" fill="#388E3C" mask="url(#path-4-inside-2_99_2)"/>
+<mask id="path-6-inside-3_99_2" fill="white">
+<path d="M0 29H80V42H0V29Z"/>
+</mask>
+<path d="M0 29H80V42H0V29Z" fill="#DCEDC8"/>
+<path d="M80 41H0V43H80V41Z" fill="#AED581" mask="url(#path-6-inside-3_99_2)"/>
+<mask id="path-8-inside-4_99_2" fill="white">
+<path d="M0 41H80V42H0V41Z"/>
+</mask>
+<path d="M80 41.5H0V42.5H80V41.5Z" fill="#388E3C" mask="url(#path-8-inside-4_99_2)"/>
+<mask id="path-10-inside-5_99_2" fill="white">
+<path d="M0 42H80V55H0V42Z"/>
+</mask>
+<path d="M0 42H80V55H0V42Z" fill="#DCEDC8"/>
+<path d="M80 54H0V56H80V54Z" fill="#AED581" mask="url(#path-10-inside-5_99_2)"/>
+<mask id="path-12-inside-6_99_2" fill="white">
+<path d="M0 54H80V55H0V54Z"/>
+</mask>
+<path d="M80 54.5H0V55.5H80V54.5Z" fill="#388E3C" mask="url(#path-12-inside-6_99_2)"/>
+<mask id="path-14-inside-7_99_2" fill="white">
+<path d="M0 55H80V68H0V55Z"/>
+</mask>
+<path d="M0 55H80V68H0V55Z" fill="#DCEDC8"/>
+<path d="M80 67H0V69H80V67Z" fill="#AED581" mask="url(#path-14-inside-7_99_2)"/>
+<mask id="path-16-inside-8_99_2" fill="white">
+<path d="M0 67H80V68H0V67Z"/>
+</mask>
+<path d="M80 67.5H0V68.5H80V67.5Z" fill="#388E3C" mask="url(#path-16-inside-8_99_2)"/>
+<rect width="80" height="13" transform="translate(0 68)" fill="#DCEDC8"/>
+<mask id="path-18-inside-9_99_2" fill="white">
+<path d="M0 0H80V16H0V0Z"/>
+</mask>
+<path d="M0 0H80V16H0V0Z" fill="#C5E1A5"/>
+<path d="M80 15H0V17H80V15Z" fill="#388E3C" mask="url(#path-18-inside-9_99_2)"/>
+<mask id="path-20-inside-10_99_2" fill="white">
+<path d="M0 0H10V80H0V0Z"/>
+</mask>
+<path d="M9 0V80H11V0H9Z" fill="#388E3C" mask="url(#path-20-inside-10_99_2)"/>
+</g>
+<defs>
+<clipPath id="clip0_99_2">
+<rect width="80" height="80" rx="6" fill="white"/>
+</clipPath>
+</defs>
+</svg>

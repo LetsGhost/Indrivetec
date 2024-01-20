@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: electron-app
+appId: com.paehrling.com
+productName: Table-App-Indrivetec 
 directories:
   buildResources: build
 files:
@@ -12,8 +12,8 @@ asarUnpack:
   - resources/**
 win:
   target: portable
-  executableName: Tabell-Master-Indrivetec
-  # icon: build/icon.ico
+  executableName: Table-App-Indrivetec 
+  icon: Icon-table.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -34,7 +34,7 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
+  maintainer: PAEhrling
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}

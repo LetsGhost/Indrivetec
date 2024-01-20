@@ -1,5 +1,6 @@
 import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
+import path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import Store from 'electron-store'
@@ -15,6 +16,7 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: false,
+    icon: path.join(__dirname, './Icon-table.ico'),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       contextIsolation: true,
@@ -131,13 +133,11 @@ function createWindow() {
 
     for (let key in items) {
       let fetchPromise = fetch(items[key].remoteAccessIPAddress)
-        .then((response) => {
+        .then(() => {
           items[key].onlineOffline = true
-          console.log(items[key].remoteAccessIPAddress + ' is online')
         })
-        .catch((error) => {
+        .catch(() => {
           items[key].onlineOffline = false
-          console.log(items[key].remoteAccessIPAddress + ' is offline')
         })
 
       fetchPromises.push(fetchPromise)
