@@ -119,13 +119,33 @@ function createWindow() {
   ipcMain.on('save-data', (event, arg) => {
     store.set(id.toString(), arg)
     id++
+    //mainWindow.webContents.reload()
   })
 
   ipcMain.on('load-data', () => {
     const items = store.store
     const length = Object.keys(items).length
     id = length
-    mainWindow.webContents.send('load-data', items)
+
+    let fetchPromises = []
+
+    for (let key in items) {
+      let fetchPromise = fetch(items[key].remoteAccessIPAddress)
+        .then((response) => {
+          items[key].onlineOffline = true
+          console.log(items[key].remoteAccessIPAddress + ' is online')
+        })
+        .catch((error) => {
+          items[key].onlineOffline = false
+          console.log(items[key].remoteAccessIPAddress + ' is offline')
+        })
+
+      fetchPromises.push(fetchPromise)
+    }
+
+    Promise.all(fetchPromises).then(() => {
+      mainWindow.webContents.send('load-data', items)
+    })
   })
 
   ipcMain.on('delete-data', (event, arg) => {
@@ -134,9 +154,7 @@ function createWindow() {
 
   ipcMain.on('update-data', (event, arg) => {
     const parsedData = JSON.parse(arg)
-    for(let i = 0; i < parsedData.length; i++) {
-      store.set(i.toString(), parsedData[i])
-    }
+    console.log(parsedData)
   })
 
   ipcMain.on('save-date', (event, arg) => {
