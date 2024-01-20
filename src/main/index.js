@@ -85,6 +85,7 @@ function createWindow() {
           }
         ]
       },
+      /*
       {
         label: 'Dev',
         submenu: [
@@ -111,6 +112,7 @@ function createWindow() {
           }
         ]
       }
+      */
     ])
   )
 
