@@ -13,7 +13,7 @@ asarUnpack:
 win:
   target: portable
   executableName: Table-App-Indrivetec 
-  icon: Icon-table.png
+  icon: Icon-App.jpg
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

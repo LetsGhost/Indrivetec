@@ -1,5 +1,5 @@
 {
-  "name": "Tabell-Master-Indrivetec",
+  "name": "Table-App-Indrivetec",
   "version": "1.0.0",
   "description": "A table manager app for Indrivetec",
   "main": "./out/main/index.js",
