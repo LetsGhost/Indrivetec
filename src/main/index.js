@@ -108,6 +108,7 @@ function createWindow() {
             accelerator: 'CommandOrControl+D',
             click: () => {
               store.clear()
+              timeStore.clear()
             }
           }
         ]
