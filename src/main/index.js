@@ -131,6 +131,7 @@ function createWindow() {
 
     let fetchPromises = []
 
+    // TODO: Change this to axios
     for (let key in items) {
       let fetchPromise = fetch(items[key].remoteAccessIPAddress)
         .then(() => {
