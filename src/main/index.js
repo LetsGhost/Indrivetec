@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import Store from 'electron-store'
 import fs from 'fs'
 import axios from 'axios'
+import url from 'url'
 
 
 const store = new Store()
@@ -134,12 +135,27 @@ function createWindow() {
     let fetchPromises = []
 
     for (let key in items) {
-      let fetchPromise = axios.get(items[key].remoteAccessIPAddress)
+      let remoteAccessURL = items[key].remoteAccessIPAddress;
+      let parsedURL = url.parse(remoteAccessURL, true);
+    
+      // If the protocol is not specified, assume it's http
+      if (!parsedURL.protocol) {
+        // Check if the hostname is not null and starts with 'www.' 
+        if (parsedURL.hostname && parsedURL.hostname.startsWith('www.')) {
+          // If it does, assume it's an https URL
+          remoteAccessURL = 'https://' + remoteAccessURL;
+        } else {
+          // If it doesn't, assume it's an http URL
+          remoteAccessURL = 'http://' + remoteAccessURL;
+        }
+      }
+    
+      let fetchPromise = axios.get(remoteAccessURL)
         .then(() => {
           items[key].onlineOffline = true
         })
         .catch((error) => {
-          console.error(`Failed to fetch from ${items[key].remoteAccessIPAddress}: ${error.message}`);
+          console.error(`Failed to fetch from ${remoteAccessURL}: ${error.message}`);
           items[key].onlineOffline = false
         })
     
