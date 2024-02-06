@@ -4,6 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import Store from 'electron-store'
 import fs from 'fs'
+import axios from 'axios'
+
 
 const store = new Store()
 const timeStore = new Store({ name: 'date-time' })
@@ -85,7 +87,7 @@ function createWindow() {
           }
         ]
       },
-      /*
+      
       {
         label: 'Dev',
         submenu: [
@@ -113,7 +115,7 @@ function createWindow() {
           }
         ]
       }
-      */
+      
     ])
   )
 
@@ -131,16 +133,16 @@ function createWindow() {
 
     let fetchPromises = []
 
-    // TODO: Change this to axios
     for (let key in items) {
-      let fetchPromise = fetch(items[key].remoteAccessIPAddress)
+      let fetchPromise = axios.get(items[key].remoteAccessIPAddress)
         .then(() => {
           items[key].onlineOffline = true
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(`Failed to fetch from ${items[key].remoteAccessIPAddress}: ${error.message}`);
           items[key].onlineOffline = false
         })
-
+    
       fetchPromises.push(fetchPromise)
     }
 
