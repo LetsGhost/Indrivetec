@@ -1,11 +1,53 @@
-import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, Menu, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import fs from 'fs'
+import os from 'os'
+import path from 'path'
+import ping from 'ping'
 
-const store = new Store()
-const timeStore = new Store({ name: 'date-time' })
+// Global data array
+let tabelleArray = []
+let timeObject = {}
+
+// Get the user's home directory
+const userHomeDirectory = os.homedir()
+
+// Define the file path
+const filePath = path.join(userHomeDirectory, 'Indrivetec-Tabelle')
+
+// Define the file name
+const tabelleData = 'tabelleData.json'
+const timeData = 'timeData.json'
+
+// Create the directory if it doesn't exist
+if (!fs.existsSync(filePath)) {
+  fs.mkdirSync(filePath)
+}
+
+// Create the file if it doesn't exist
+if (
+  !fs.existsSync(path.join(filePath, tabelleData)) ||
+  !fs.existsSync(path.join(filePath, timeData))
+) {
+  fs.writeFileSync(path.join(filePath, tabelleData), '[]')
+  fs.writeFileSync(path.join(filePath, timeData), '{}')
+}
+
+// Read the file
+// Ping the HTTP adresses before inserting
+tabelleArray = JSON.parse(fs.readFileSync(path.join(filePath, tabelleData), 'utf8'))
+tabelleArray.forEach(function (item) {
+  const host = item.remoteAccessIPAddress;
+  ping.sys.probe(host, function (isAlive) {
+    if (isAlive) {
+      item.onlineOffline = true
+    }
+  })
+})
+
+timeObject = JSON.parse(fs.readFileSync(path.join(filePath, timeData), 'utf8'))
 
 function createWindow() {
   // Create the browser window.
@@ -46,45 +88,12 @@ function createWindow() {
         label: 'Datei',
         submenu: [
           {
-            label: 'Speichern',
-            click: async () => {
-              const currentTime = new Date()
-              const date = currentTime.toLocaleDateString('de-DE')
-              const dateTime = `${date}`
-              const { filePath } = await dialog.showSaveDialog({
-                title: 'Save data to file',
-                defaultPath: `Tabelle_${dateTime}.json`,
-                filters: [{ name: `JSON`, extensions: ['json'] }]
-              })
-
-              if (filePath) {
-                const data = JSON.stringify(store.store)
-                fs.writeFileSync(filePath, data)
-              }
-            }
-          },
-          {
             label: 'Laden',
-            click: async () => {
-              const { filePaths } = await dialog.showOpenDialog({
-                title: 'Load data from file',
-                filters: [{ name: `JSON`, extensions: ['json'] }]
-              })
-
-              if (filePaths[0]) {
-                const data = fs.readFileSync(filePaths[0])
-                const parsedData = JSON.parse(data)
-                store.clear()
-                for (const [key, value] of Object.entries(parsedData)) {
-                  store.set(key, value)
-                }
-                mainWindow.webContents.reload()
-              }
-            }
+            click: async () => {}
           }
         ]
       },
-      
+
       {
         label: 'Dev',
         submenu: [
@@ -101,84 +110,34 @@ function createWindow() {
             click: () => {
               mainWindow.webContents.reload()
             }
-          },
-          {
-            label: 'Clear',
-            accelerator: 'CommandOrControl+D',
-            click: () => {
-              store.clear()
-              timeStore.clear()
-            }
           }
         ]
       }
-      
     ])
   )
 
   ipcMain.on('save-data', (event, arg) => {
-    data.push(arg)
+    tabelleArray.push(arg)
   })
 
   ipcMain.on('load-data', () => {
-    const items = store.store
-    const length = Object.keys(items).length
-    id = length
-
-    let fetchPromises = []
-
-    for (let key in items) {
-      let remoteAccessURL = items[key].remoteAccessIPAddress;
-      let parsedURL = url.parse(remoteAccessURL, true);
-    
-      // If the protocol is not specified, assume it's http
-      if (!parsedURL.protocol) {
-        // Check if the hostname is not null and starts with 'www.' 
-        if (parsedURL.hostname && parsedURL.hostname.startsWith('www.')) {
-          // If it does, assume it's an https URL
-          remoteAccessURL = 'https://' + remoteAccessURL;
-        } else {
-          // If it doesn't, assume it's an http URL
-          remoteAccessURL = 'http://' + remoteAccessURL;
-        }
-      }
-    
-      let fetchPromise = axios.get(remoteAccessURL)
-        .then(() => {
-          items[key].onlineOffline = true
-        })
-        .catch((error) => {
-          console.error(`Failed to fetch from ${remoteAccessURL}: ${error.message}`);
-          items[key].onlineOffline = false
-        })
-    
-      fetchPromises.push(fetchPromise)
-    }
-
-    Promise.all(fetchPromises).then(() => {
-      mainWindow.webContents.send('load-data', items)
-    })
+    mainWindow.webContents.send('load-data', tabelleArray)
   })
 
   ipcMain.on('delete-data', (event, arg) => {
-    store.delete(arg.toString())
+    tabelleArray.splice(arg, 1)
   })
 
   ipcMain.on('update-data', (event, arg) => {
-    const parsedData = JSON.parse(arg)
-    for(let i = 0; i < parsedData.length; i++) {
-      store.set(i.toString(), parsedData[i])
-    }
+    tabelleArray = JSON.parse(arg)
   })
 
-  ipcMain.on('save-date', (event, arg) => {
-    timeStore.set('time', arg.time)
-    timeStore.set('date', arg.date)
+  ipcMain.on('save-time', (event, arg) => {
+    timeObject = arg
   })
 
-  ipcMain.on('load-date', () => {
-    const items = timeStore.store
-    mainWindow.webContents.send('load-date', items)
+  ipcMain.on('load-time', () => {
+    mainWindow.webContents.send('load-time', timeObject)
   })
 }
 
@@ -210,8 +169,11 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   // Save the data to the file
-  const dataJSON = JSON.stringify(data)
-  fs.writeFileSync(path.join(filePath, fileName), dataJSON)
+  const dataJSON = JSON.stringify(tabelleArray)
+  fs.writeFileSync(path.join(filePath, tabelleData), dataJSON)
+
+  const timeJSON = JSON.stringify(timeObject)
+  fs.writeFileSync(path.join(filePath, timeData), timeJSON)
 
   if (process.platform !== 'darwin') {
     app.quit()
