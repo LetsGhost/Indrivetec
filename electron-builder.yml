@@ -1,5 +1,5 @@
 appId: com.paehrling.com
-productName: Table-App-Indrivetec 
+productName: Table-App-Indrivetec
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ asarUnpack:
   - resources/**
 win:
   target: portable
-  executableName: Table-App-Indrivetec 
+  executableName: Table-App-Indrivetec
   icon: Icon-App.jpg
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
