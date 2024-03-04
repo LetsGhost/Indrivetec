@@ -2,11 +2,32 @@ import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import Store from 'electron-store'
 import fs from 'fs'
+import os from 'os'
+import path from 'path'
 
-const store = new Store()
-const timeStore = new Store({ name: 'date-time' })
+// The Global Array of DATA
+let data = []
+
+// Create the JSON file where the data is being stored
+const userHomeDirectory = os.homedir();
+
+const filePath = path.join(userHomeDirectory, 'Indrivetec-Tabelle');
+
+const fileName = 'data.json';
+
+if (!fs.existsSync(filePath)) {
+  fs.mkdirSync(filePath);
+  console.log('Directory created');
+}
+
+if (!fs.existsSync(path.join(filePath, fileName))) {
+  fs.writeFileSync(path.join(filePath, fileName), '{}');
+  console.log('File created');
+}
+
+// Load the data from the file
+data = JSON.parse(fs.readFileSync(path.join(filePath, fileName), 'utf8'));
 
 function createWindow() {
   // Create the browser window.
@@ -117,11 +138,8 @@ function createWindow() {
     ])
   )
 
-  let id = 0
   ipcMain.on('save-data', (event, arg) => {
-    store.set(id.toString(), arg)
-    id++
-    //mainWindow.webContents.reload()
+    data.push(arg)
   })
 
   ipcMain.on('load-data', () => {
@@ -198,6 +216,10 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
+  // Save the data to the file
+  const dataJSON = JSON.stringify(data)
+  fs.writeFileSync(path.join(filePath, fileName), dataJSON)
+
   if (process.platform !== 'darwin') {
     app.quit()
   }
