@@ -3,31 +3,9 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import fs from 'fs'
-import os from 'os'
-import path from 'path'
 
-// The Global Array of DATA
-let data = []
-
-// Create the JSON file where the data is being stored
-const userHomeDirectory = os.homedir();
-
-const filePath = path.join(userHomeDirectory, 'Indrivetec-Tabelle');
-
-const fileName = 'data.json';
-
-if (!fs.existsSync(filePath)) {
-  fs.mkdirSync(filePath);
-  console.log('Directory created');
-}
-
-if (!fs.existsSync(path.join(filePath, fileName))) {
-  fs.writeFileSync(path.join(filePath, fileName), '{}');
-  console.log('File created');
-}
-
-// Load the data from the file
-data = JSON.parse(fs.readFileSync(path.join(filePath, fileName), 'utf8'));
+const store = new Store()
+const timeStore = new Store({ name: 'date-time' })
 
 function createWindow() {
   // Create the browser window.
@@ -106,7 +84,7 @@ function createWindow() {
           }
         ]
       },
-      /*
+      
       {
         label: 'Dev',
         submenu: [
@@ -134,7 +112,7 @@ function createWindow() {
           }
         ]
       }
-      */
+      
     ])
   )
 
@@ -149,16 +127,31 @@ function createWindow() {
 
     let fetchPromises = []
 
-    // TODO: Change this to axios
     for (let key in items) {
-      let fetchPromise = fetch(items[key].remoteAccessIPAddress)
+      let remoteAccessURL = items[key].remoteAccessIPAddress;
+      let parsedURL = url.parse(remoteAccessURL, true);
+    
+      // If the protocol is not specified, assume it's http
+      if (!parsedURL.protocol) {
+        // Check if the hostname is not null and starts with 'www.' 
+        if (parsedURL.hostname && parsedURL.hostname.startsWith('www.')) {
+          // If it does, assume it's an https URL
+          remoteAccessURL = 'https://' + remoteAccessURL;
+        } else {
+          // If it doesn't, assume it's an http URL
+          remoteAccessURL = 'http://' + remoteAccessURL;
+        }
+      }
+    
+      let fetchPromise = axios.get(remoteAccessURL)
         .then(() => {
           items[key].onlineOffline = true
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(`Failed to fetch from ${remoteAccessURL}: ${error.message}`);
           items[key].onlineOffline = false
         })
-
+    
       fetchPromises.push(fetchPromise)
     }
 
