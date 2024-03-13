@@ -118,7 +118,7 @@ export default {
     const customerAcceptance = ref('')
     const onlineOffline = ref(false)
     const run = ref(false)
-    const idle = ref(false)
+    const idle = ref(true)
     const charge = ref(false)
     const extControl = ref('')
     const warning = ref('')

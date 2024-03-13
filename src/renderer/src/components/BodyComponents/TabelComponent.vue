@@ -10,6 +10,7 @@
           </th>
         </div>
         <div class="header middle">
+          <div class="hint">Kann immer bearbeitet werden!</div>
           <th v-for="(text, index) in headContentMiddle" :key="index">
             {{ text }}
           </th>
@@ -64,16 +65,100 @@
           <!-- middle -->
           <div class="line middle">
             <td>
-              <div
+              <label
+                :for="`onlineOffline-${index}`"
                 class="circle"
                 :class="{
                   red: text.onlineOffline === false,
                   green: text.onlineOffline === true
                 }"
-              ></div>
+              ></label>
+              <input
+                type="checkbox"
+                name="onlineOffline"
+                :id="`onlineOffline-${index}`"
+                v-model="text.onlineOffline"
+              />
             </td>
             <td>
-              <div
+              <label
+                :for="`run-${index}`"
+                class="circle"
+                :class="{
+                  green: text.runOffIdleChargeDischarge.run,
+                  black: text.runOffIdleChargeDischarge.run === false
+                }"
+              ></label>
+              <input
+                type="checkbox"
+                name="run"
+                :id="`run-${index}`"
+                v-model="text.runOffIdleChargeDischarge.run"
+              />
+              <!-- switch between idle, charge & discharge -->
+              <span>
+                <!-- idle -->
+                <label :for="`idle-${index}`">
+                  <font-awesome-icon
+                    :icon="['fas', 'minus']"
+                    class="icon"
+                    :class="{ grey: text.runOffIdleChargeDischarge.idle }"
+                  />
+                </label>
+                <input
+                  type="checkbox"
+                  name="idle"
+                  :id="`idle-${index}`"
+                  v-model="text.runOffIdleChargeDischarge.idle"
+                />
+                <!-- charge -->
+                <label
+                  :for="`charge-${index}`"
+                  v-if="
+                    text.runOffIdleChargeDischarge.charge && !text.runOffIdleChargeDischarge.idle
+                  "
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'arrow-up']"
+                    class="icon"
+                    :class="{
+                      grey:
+                        text.runOffIdleChargeDischarge.charge &&
+                        !text.runOffIdleChargeDischarge.idle
+                    }"
+                  />
+                </label>
+                <input
+                  type="checkbox"
+                  name="idle"
+                  :id="`charge-${index}`"
+                  v-model="text.runOffIdleChargeDischarge.charge"
+                />
+                <!-- discharge -->
+                <label
+                  :for="`discharge-${index}`"
+                  v-if="
+                    !text.runOffIdleChargeDischarge.charge && !text.runOffIdleChargeDischarge.idle
+                  "
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'arrow-down']"
+                    class="icon"
+                    :class="{
+                      grey:
+                        !text.runOffIdleChargeDischarge.charge &&
+                        !text.runOffIdleChargeDischarge.idle
+                    }"
+                  />
+                </label>
+                <input
+                  type="checkbox"
+                  name="idle"
+                  :id="`discharge-${index}`"
+                  v-model="text.runOffIdleChargeDischarge.charge"
+                />
+              </span>
+              <!-- <div
                 class="circle"
                 :class="{
                   black: text.runOffIdleChargeDischarge.run === false,
@@ -102,20 +187,37 @@
                   text.runOffIdleChargeDischarge.idle !== true
                 "
                 class="icon"
+              /> -->
+            </td>
+            <td>
+              <label :for="`extControl-${index}`" class="circle">
+                <font-awesome-icon :icon="['fas', 'x']" class="red-xmark" v-if="text.extControl" />
+              </label>
+              <input
+                type="checkbox"
+                name="extControl"
+                :id="`extControl-${index}`"
+                v-model="text.extControl"
               />
             </td>
             <td>
-              <div class="circle" v-if="text.extControl === true">
-                <font-awesome-icon :icon="['fas', 'x']" class="red-xmark" />
-              </div>
+              <label :for="`warning-${index}`" class="circle" :class="{ yellow: text.warning }">
+              </label>
+              <input
+                type="checkbox"
+                name="warning"
+                :id="`warning-${index}`"
+                v-model="text.warning"
+              />
             </td>
             <td>
-              <div class="circle" :class="{ yellow: text.warning === true }"></div>
+              <label :for="`fault-${index}`" class="circle" :class="{ red: text.fault }"> </label>
+              <input type="checkbox" name="fault" :id="`fault-${index}`" v-model="text.fault" />
             </td>
             <td>
-              <div class="circle" :class="{ red: text.fault === true }"></div>
+              <input type="text" name="" id="" v-model="text.soc" class="soc-input" />
+              <span v-if="text.soc">%</span>
             </td>
-            <td>{{ text.soc }}</td>
           </div>
           <!-- right -->
           <div class="line right">
@@ -130,6 +232,7 @@
           </div>
         </tr>
       </div>
+      <tr class="placeholder"></tr>
     </table>
 
     <!-- table edit version -->
@@ -142,9 +245,7 @@
           </th>
         </div>
         <div class="header middle">
-          <th v-for="(text, index) in headContentMiddle" :key="index">
-            {{ text }}
-          </th>
+          <th v-for="(text, index) in headContentMiddle" :key="index">{{ text }}</th>
         </div>
         <div class="header right">
           <th v-for="(text, index) in headContentRight" :key="index">
@@ -406,7 +507,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import FootlineComponent from './FootlineComponent.vue'
 
 export default {
@@ -435,7 +536,7 @@ export default {
       'external control',
       'Warning',
       'Fault',
-      'SoC'
+      'SOC'
     ])
     const headContentRight = ref(['Remote Access IP-Address', 'Location'])
     // array with all line data
@@ -473,6 +574,12 @@ export default {
     }
 
     // save edit
+
+    watch(lineDataArray.value, (newVal) => {
+      newLineData.value = lineDataArray.value // <- save the newLineData
+      window.electron.send('update-data', JSON.stringify(newLineData.value))
+      //console.log(newVal)
+    })
 
     const saveEdit = () => {
       editModus.value = !editModus.value
@@ -527,7 +634,7 @@ main {
   table {
     @include center();
     flex-direction: column;
-    width: 100%;
+    width: 97%;
     border-collapse: collapse;
 
     tr {
@@ -535,11 +642,13 @@ main {
       width: 100%;
 
       //table basics
+      $font-size: 0.85em;
 
       th {
         @include center();
         height: 100%;
         width: 100%;
+        font-size: $font-size;
         font-weight: 400;
       }
 
@@ -549,6 +658,7 @@ main {
         gap: 0.5rem;
         height: 100%;
         width: 100%;
+        font-size: $font-size;
       }
 
       // header
@@ -565,8 +675,8 @@ main {
 
       .line {
         @include center();
-        margin: 1rem 1rem 1rem 0rem;
-        height: 4rem;
+        margin: 0.5rem 1rem 1rem 0rem;
+        height: 3rem;
         border-bottom: solid 2px $table-clr-stroce;
 
         span {
@@ -575,6 +685,17 @@ main {
 
           input[type='text'] {
             width: 80%;
+          }
+        }
+
+        .soc-input {
+          width: 50%;
+          background-color: transparent;
+          border: none;
+          text-align: end;
+          cursor: pointer;
+          &:focus {
+            outline: none;
           }
         }
 
@@ -598,13 +719,13 @@ main {
         }
 
         .circle {
-          $size: 2.5rem;
+          $size: 2rem;
           @include center();
           width: $size;
           height: $size;
           border-radius: 50%;
           background-color: $highlight-clr-grey;
-          font-size: 1.3em;
+          font-size: 1em;
 
           .red-xmark {
             color: $highlight-clr-red;
@@ -710,8 +831,20 @@ main {
       }
 
       .middle {
+        position: relative;
         padding: 0.25rem 0.5rem 0.25rem 0.5rem;
         width: 35%;
+
+        .hint {
+          position: absolute;
+          top: -0.5rem;
+          right: -0.25rem;
+          padding: 0.15rem 0.5rem;
+          background-color: $company-clr-green;
+          border-radius: 0.5rem;
+          color: $text-clr-white;
+          font-size: 0.7em;
+        }
       }
 
       .right {
@@ -723,9 +856,46 @@ main {
     .table-body {
       margin-top: 1rem;
       width: 100%;
-      max-height: 60vh;
+      max-height: 50vh;
       overflow-y: scroll;
       overflow-x: hidden;
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+        background-color: $background-clr-white;
+        border-radius: 1rem;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: $table-clr-header;
+        border-radius: 1rem;
+      }
+    }
+
+    @media screen and (max-height: 900px) {
+      .table-body {
+        max-height: 45vh;
+      }
+    }
+
+    @media screen and (max-height: 750px) {
+      .table-body {
+        max-height: 40vh;
+      }
+    }
+
+    @media screen and (max-height: 690px) {
+      .table-body {
+        max-height: 35vh;
+      }
+    }
+
+    @media screen and (max-height: 630px) {
+      .table-body {
+        max-height: 30vh;
+      }
+    }
+
+    .placeholder {
+      height: 4rem;
     }
   }
 

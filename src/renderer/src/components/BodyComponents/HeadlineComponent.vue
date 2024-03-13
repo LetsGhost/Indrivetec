@@ -15,7 +15,7 @@
       </div>
       <MenueComponent />
     </main>
-    <div class="background" v-if="toggleEditWin">
+    <div v-if="toggleEditWin" class="background">
       <div class="edit-timestamp-container">
         <span>
           <p>Timestamp bearbeiten</p>
@@ -25,8 +25,9 @@
         </span>
         <span>
           <div class="wrapper">
-            <input type="date" v-model="date" />
-            <input type="time" v-model="time" />
+            <input v-model="date" type="date" />
+            <input v-model="time" type="time" />
+            <button @click="setTimeToNow">heute</button>
           </div>
           <button class="button" @click="saveTimeStampEdit">Speichern</button>
         </span>
@@ -53,7 +54,23 @@ export default {
       toggleEditWin.value = !toggleEditWin.value
     }
 
+    // set time
     const saveTimeStampEdit = () => {
+      toggleEditWin.value = !toggleEditWin.value
+      window.electron.send('save-time', { date: date.value, time: time.value })
+    }
+
+    // set time to now
+    const setTimeToNow = () => {
+      const now = new Date()
+      const day = now.getDate()
+      const month = now.getMonth() + 1
+      const year = now.getFullYear()
+      const hours = now.getHours()
+      const minutes = now.getMinutes()
+      date.value = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+      time.value = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+
       toggleEditWin.value = !toggleEditWin.value
       window.electron.send('save-time', { date: date.value, time: time.value })
     }
@@ -63,7 +80,8 @@ export default {
       toggleEditWin,
       saveTimeStampEdit,
       date,
-      time
+      time,
+      setTimeToNow
     }
   },
 
@@ -140,6 +158,7 @@ main {
       }
     }
   }
+
   .background {
     position: absolute;
     top: 0;
@@ -168,7 +187,7 @@ main {
         @include center();
         flex-direction: column;
         width: 100%;
-        gap: 2rem;
+        gap: 3rem;
 
         p {
           margin: 0;
@@ -177,6 +196,7 @@ main {
         }
 
         .wrapper {
+          position: relative;
           @include center();
           gap: 0.5rem;
 
@@ -187,6 +207,23 @@ main {
             border-radius: 0.5rem;
             color: $text-clr-black;
             font-size: 1em;
+          }
+
+          button {
+            position: absolute;
+            bottom: -1.5rem;
+            right: -0.2rem;
+            background-color: transparent;
+            border: none;
+            font-size: 0.8em;
+            cursor: pointer;
+            text-decoration: underline;
+            &:hover {
+              scale: 1.1;
+            }
+            &:active {
+              scale: 0.99;
+            }
           }
         }
 

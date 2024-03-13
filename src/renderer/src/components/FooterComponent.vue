@@ -32,6 +32,7 @@ main {
   justify-content: space-between;
   padding: 1rem;
   width: 100%;
+  background-color: $background-clr-white;
 
   span {
     @include center();
