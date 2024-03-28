@@ -1,10 +1,8 @@
 {
   "name": "Table-App-Indrivetec",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A table manager app for Indrivetec",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
