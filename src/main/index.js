@@ -43,6 +43,8 @@ tabelleArray.forEach(function (item) {
   ping.sys.probe(host, function (isAlive) {
     if (isAlive) {
       item.onlineOffline = true
+    } else {
+      console.log('Host ' + host + ' is offline')
     }
   })
 })
