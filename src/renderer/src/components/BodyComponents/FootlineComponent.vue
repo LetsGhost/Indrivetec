@@ -78,11 +78,11 @@ export default {
 
 .container {
   position: sticky;
-  bottom: 5rem;
+  bottom: 4rem;
   @include center();
   justify-content: space-between;
   padding: 0.5rem 0;
-  width: 100%;
+  width: 95%;
   background-color: $background-clr-white;
 
   .counter {
