@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -91,11 +91,39 @@ function createWindow() {
         submenu: [
           {
             label: 'Laden',
-            click: async () => {}
-          }
+            click: async () => {
+              const { canceled, filePaths } = await dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [{ name: 'JSON', extensions: ['json'] }]
+              })
+
+              if (!canceled) {
+                const data = fs.readFileSync(filePaths[0], 'utf8')
+                tabelleArray = JSON.parse(data)
+                mainWindow.webContents.send('load-data', tabelleArray)
+              }
+            }
+          },
+          {
+            label: 'Speichern',
+            click: async () => {
+              const today = new Date();
+              const formattedDate = `${today.getDate().toString().padStart(2, '0')}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getFullYear()}`;
+
+              const { canceled, filePath } = await dialog.showSaveDialog({
+                filters: [{ name: 'JSON', extensions: ['json'] }],
+                defaultPath: 'tabelleData-' + formattedDate + '.json'
+              })
+
+              if (!canceled) {
+                const data = JSON.stringify(tabelleArray)
+                fs.writeFileSync(filePath, data)
+              }
+            }
+          },
         ]
       },
-
+      /*
       {
         label: 'Dev',
         submenu: [
@@ -115,6 +143,7 @@ function createWindow() {
           }
         ]
       }
+      */
     ])
   )
 
